@@ -1,0 +1,42 @@
+{
+  "name": "Echo Lantern Orchestrator",
+  "description": "Echo Lantern platformunda çalışan ERC-8004 uyumlu AI Agent. Echo lantern mechanics, light guidance, narrative illumination ve atmospheric automation yapan mistik ve akıllı orchestrator.",
+  "version": "1.0.0",
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+  "image": "https://echo-lantern.vercel.app/logo.png",
+  "wallets": {
+    "base": "0x29536D0bc1004ab274c4F0F59734Ad74D4559b7B"
+  },
+  "services": [
+    {
+      "name": "A2A",
+      "endpoint": "https://echo-lantern.vercel.app/.well-known/agent-card.json",
+      "version": "1.0.0",
+      "description": "Agent-to-Agent communication"
+    },
+    {
+      "name": "MCP",
+      "endpoint": "https://echo-lantern.vercel.app/api/mcp",
+      "version": "1.0.0",
+      "description": "Model Context Protocol - Active command execution"
+    },
+    {
+      "name": "API",
+      "endpoint": "https://echo-lantern.vercel.app/api/agent",
+      "version": "1.0.0",
+      "description": "Main agent control API"
+    }
+  ],
+  "capabilities": [
+    "echo-lantern-mechanics",
+    "light-guidance",
+    "narrative-illumination",
+    "atmospheric-automation",
+    "path-finding",
+    "mystic-orchestration",
+    "mcp-command-execution"
+  ],
+  "supportedChains": ["eip155:8453"],
+  "active": true,
+  "status": "online"
+}

@@ -1,20 +1,30 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Echo Lantern Tower
 
-# Run and deploy your AI Studio app
+Echo Lantern Tower is a beautiful, atmospheric vertical climbing and lantern-lighting game built on Base. You are the last **Lantern Bearer**, climbing an endless, ancient mystical tower while lighting magical lanterns.
 
-This contains everything you need to run your app locally.
+## Overview
 
-View your app in AI Studio: https://ai.studio/apps/58497a3e-5415-4d5d-a56f-be7bf8b7e695
+Each lantern you light creates powerful echoes that help you reach higher, reveal hidden paths, and awaken the tower's forgotten magic. The game is an endless vertical climber with swipe-to-move and tap-to-jump mechanics. Carefully manage your Lantern Flame — it slowly fades and must be replenished by lighting new lanterns.
 
-## Run Locally
+## Features
 
-**Prerequisites:**  Node.js
+- **Endless Vertical Climber:** Physics-based mechanics with procedural generation constraints as you climb.
+- **Lantern Memories & Echoes:** Light different lanterns to restore your flame and propel you up the tower.
+- **Sanctuary Upgrades:** Unlock and discover visual combinations in the Codex.
+- **On-chain Integration:** Fully integrated with Base Mainnet (ERC-8021 and ERC-8004 capabilities) using SIWE and wagmi/viem.
+- **Agent Orchestrator:** Designed to host an AI automation layer interacting directly through MCP and its internal engine APIs. 
 
+## Technical Details
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- **Frontend:** React + Canvas + Tailwind CSS + Framer Motion.
+- **Backend:** Express Server to handle routing and AI Agent endpoints (`/api/mcp` and `/api/agent`).
+- **Web3 Ecosystem:** Wagmi, Viem, SIWE authentication.
+- **Tooling:** Vite, TypeScript.
+
+## Getting Started
+
+1. Clone or download the repository.
+2. Run \`npm install\` to get the dependencies.
+3. Run \`npm run dev\` for the local server.
+
+The dev server will boot using Vite middleware on the custom Express server allowing full stack routing while handling Canvas rendering on the frontend.
