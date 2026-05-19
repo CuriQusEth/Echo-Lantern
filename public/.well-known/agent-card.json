@@ -27,6 +27,15 @@
       "description": "Main agent control API"
     }
   ],
+  "skills": [
+    "echo-lantern-mechanics",
+    "light-guidance",
+    "narrative-illumination",
+    "atmospheric-automation",
+    "path-finding",
+    "mystic-orchestration",
+    "mcp-command-execution"
+  ],
   "capabilities": [
     "echo-lantern-mechanics",
     "light-guidance",

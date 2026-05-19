@@ -24,9 +24,44 @@ async function startServer() {
     });
   });
 
+  const TOOLS = [
+    { name: 'get_race_status', description: 'Get the current race status', inputSchema: { type: 'object', properties: {} } },
+    { name: 'start_race', description: 'Start the race', inputSchema: { type: 'object', properties: {} } },
+    { name: 'get_leaderboard', description: 'Get the current leaderboard', inputSchema: { type: 'object', properties: {} } },
+    { name: 'optimize_speed', description: 'Optimize speed', inputSchema: { type: 'object', properties: {} } },
+    { name: 'get_track_info', description: 'Get track information', inputSchema: { type: 'object', properties: {} } }
+  ];
+
   app.post("/api/mcp", (req, res) => {
     try {
       const body = req.body;
+      const { method } = body;
+      
+      if (method === 'initialize') {
+        res.json({ 
+          protocolVersion: "1.0.0", 
+          capabilities: { tools: {}, prompts: {}, resources: {} }, 
+          serverInfo: { name: "Echo Lantern MCP", version: "1.0.0" }
+        });
+        return;
+      } else if (method === 'tools/list') {
+        res.json({ tools: TOOLS });
+        return;
+      } else if (method === 'tools/call') {
+        res.json({ 
+          status: "success", 
+          result: `Successfully executed ${body.params?.name || 'tool'}`, 
+          tool: body.params?.name 
+        });
+        return;
+      } else if (method === 'prompts/list') {
+        res.json({ prompts: [] });
+        return;
+      } else if (method === 'resources/list') {
+        res.json({ resources: [] });
+        return;
+      }
+
       res.json({
         status: "success",
         message: "MCP command received",
