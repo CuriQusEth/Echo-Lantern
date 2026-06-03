@@ -34,26 +34,35 @@ export default function handler(req: any, res: any) {
   if (req.method === 'POST') {
     try {
       const body = req.body || {};
-      const { method } = body;
+      const { method, id } = body;
       
+      const sendResponse = (result: any) => {
+        if (id !== undefined) {
+          return res.status(200).json({ jsonrpc: "2.0", id, result });
+        }
+        return res.status(200).json(result);
+      };
+
       if (method === 'initialize') {
-        return res.status(200).json({ 
-          protocolVersion: "1.0.0", 
+        return sendResponse({ 
+          protocolVersion: "2024-11-05", 
           capabilities: { tools: {}, prompts: {}, resources: {} }, 
           serverInfo: { name: "Echo Lantern MCP", version: "1.0.0" }
         });
       } else if (method === 'tools/list') {
-        return res.status(200).json({ tools: TOOLS });
+        return sendResponse({ tools: TOOLS });
       } else if (method === 'tools/call') {
-        return res.status(200).json({ 
-          status: "success", 
-          result: `Successfully executed ${body.params?.name || 'tool'}`, 
-          tool: body.params?.name 
+        const toolName = body.params?.name || 'tool';
+        return sendResponse({ 
+          content: [
+            { type: "text", text: `Successfully executed ${toolName}` }
+          ],
+          isError: false
         });
       } else if (method === 'prompts/list') {
-        return res.status(200).json({ prompts: [] });
+        return sendResponse({ prompts: [] });
       } else if (method === 'resources/list') {
-        return res.status(200).json({ resources: [] });
+        return sendResponse({ resources: [] });
       }
 
       return res.status(200).json({

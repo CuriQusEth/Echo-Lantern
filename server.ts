@@ -35,30 +35,40 @@ async function startServer() {
   app.post("/api/mcp", (req, res) => {
     try {
       const body = req.body;
-      const { method } = body;
+      const { method, id } = body;
+      
+      const sendResponse = (result: any) => {
+        if (id !== undefined) {
+          res.json({ jsonrpc: "2.0", id, result });
+        } else {
+          res.json(result);
+        }
+      };
       
       if (method === 'initialize') {
-        res.json({ 
-          protocolVersion: "1.0.0", 
+        sendResponse({ 
+          protocolVersion: "2024-11-05", 
           capabilities: { tools: {}, prompts: {}, resources: {} }, 
           serverInfo: { name: "Echo Lantern MCP", version: "1.0.0" }
         });
         return;
       } else if (method === 'tools/list') {
-        res.json({ tools: TOOLS });
+        sendResponse({ tools: TOOLS });
         return;
       } else if (method === 'tools/call') {
-        res.json({ 
-          status: "success", 
-          result: `Successfully executed ${body.params?.name || 'tool'}`, 
-          tool: body.params?.name 
+        const toolName = body.params?.name || 'tool';
+        sendResponse({ 
+          content: [
+            { type: "text", text: `Successfully executed ${toolName}` }
+          ],
+          isError: false
         });
         return;
       } else if (method === 'prompts/list') {
-        res.json({ prompts: [] });
+        sendResponse({ prompts: [] });
         return;
       } else if (method === 'resources/list') {
-        res.json({ resources: [] });
+        sendResponse({ resources: [] });
         return;
       }
 
