@@ -1,9 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useGameStore } from '../../store/gameStore';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
 
 export function TitleScreen() {
   const setGameState = useGameStore((state) => state.setGameState);
+  const { isConnected, address } = useAccount();
+  const { connect, connectors } = useConnect();
+  const { disconnect } = useDisconnect();
 
   return (
     <motion.div 
@@ -12,6 +16,24 @@ export function TitleScreen() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
+      <div className="absolute top-4 right-4 flex gap-2">
+        {isConnected ? (
+          <button 
+            onClick={() => disconnect()}
+            className="px-3 py-1 rounded bg-white/10 text-white/80 text-xs hover:bg-white/20 transition"
+          >
+            {address?.slice(0, 6)}...{address?.slice(-4)}
+          </button>
+        ) : (
+          <button 
+            onClick={() => connect({ connector: connectors[0] })}
+            className="px-3 py-1 rounded bg-[#F2A93B]/20 border border-[#F2A93B]/40 text-[#F2A93B] text-xs hover:bg-[#F2A93B]/30 transition"
+          >
+            Connect Wallet
+          </button>
+        )}
+      </div>
+
       <div className="absolute top-1/4 flex flex-col items-center">
         {/* Animated single glowing lantern */}
         <motion.div 
