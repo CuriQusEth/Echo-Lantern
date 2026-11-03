@@ -27,7 +27,7 @@ export function GameOverScreen() {
     try {
       setIsSubmitting(true);
       const message = `Echo Lantern Tower Climb Record\nFloor Reached: ${score}\nBearer: ${address}\nBuilder Code: ${BUILDER_CODE}\nTimestamp: ${new Date().toISOString()}`;
-      const signature = await signMessageAsync({ message });
+      const signature = await signMessageAsync({ account: address!, message });
       
       console.log("SIWE Climb Signature:", signature);
       encodeAttributionCalldata("0x", { builderCode: BUILDER_CODE });

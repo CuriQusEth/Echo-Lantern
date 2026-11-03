@@ -16,7 +16,11 @@ export function TitleScreen() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div className="absolute top-4 right-4 flex gap-2">
+      <div className="absolute top-4 right-4 flex items-center gap-2">
+        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#0052FF]/15 border border-[#0052FF]/30 text-[#60A5FA] text-[11px] font-mono">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          Base Denim (200ms)
+        </div>
         {isConnected ? (
           <button 
             onClick={() => disconnect()}
