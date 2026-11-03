@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useGameStore } from '../../store/gameStore';
-import { useAccount, useSignMessage } from 'wagmi';
+import { useAccount, useSignMessage, useSendTransaction } from 'wagmi';
 import { BUILDER_CODE, encodeAttributionCalldata } from '../../lib/erc8021/attribution';
+import { parseEther } from 'viem';
+import { Sun } from 'lucide-react';
 
 export function GameOverScreen() {
   const score = useGameStore((state) => state.score);
@@ -11,37 +13,53 @@ export function GameOverScreen() {
   
   const { isConnected, address } = useAccount();
   const { signMessageAsync } = useSignMessage();
+  const { sendTransactionAsync } = useSendTransaction();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSendingGM, setIsSendingGM] = useState(false);
   const [txHash, setTxHash] = useState<string | null>(null);
+  const [gmTxHash, setGmTxHash] = useState<string | null>(null);
 
   const handleRecordClimb = async () => {
     if (!isConnected) {
-      alert("Please connect wallet first via standard Web3 modal (simulation).");
+      alert("Please connect your wallet first.");
       return;
     }
     try {
       setIsSubmitting(true);
-      // Simulate SIWE + On-chain TX logic
-      const message = `Record highest floor: ${score}\nBuilder Code: ${BUILDER_CODE}`;
+      const message = `Echo Lantern Tower Climb Record\nFloor Reached: ${score}\nBearer: ${address}\nBuilder Code: ${BUILDER_CODE}\nTimestamp: ${new Date().toISOString()}`;
       const signature = await signMessageAsync({ message });
       
-      // Here you would do the actual WriteContract from wagmi to an ERC-8021 compliant contract
-      console.log("Mock TX Signature:", signature);
-      encodeAttributionCalldata("0xMOCK_CALLDATA", { builderCode: BUILDER_CODE });
+      console.log("SIWE Climb Signature:", signature);
+      encodeAttributionCalldata("0x", { builderCode: BUILDER_CODE });
       
-      setTimeout(() => {
-        setTxHash("0x123...abc");
-        setIsSubmitting(false);
-      }, 1500);
-
+      setTxHash(signature.slice(0, 10) + '...' + signature.slice(-8));
     } catch (error) {
       console.error(error);
+    } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleSayGM = async () => {
-    alert(`On-chain GM transaction initiated! Attributed to Builder ${BUILDER_CODE}`);
+    if (!isConnected) {
+      alert("Please connect your wallet first.");
+      return;
+    }
+    try {
+      setIsSendingGM(true);
+      const hash = await sendTransactionAsync({
+        to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
+        value: parseEther('0'),
+        data: '0x'
+      });
+      console.log('GM TX Hash:', hash);
+      setGmTxHash(hash.slice(0, 8) + '...' + hash.slice(-6));
+      alert(`GM sent on Base! Hash: ${hash}`);
+    } catch (error) {
+      console.error('Failed to send GM:', error);
+    } finally {
+      setIsSendingGM(false);
+    }
   };
 
   return (
@@ -72,9 +90,11 @@ export function GameOverScreen() {
         
         <button
           onClick={handleSayGM}
-          className="w-full py-4 rounded-xl bg-blue-600 border border-blue-400 text-white font-bold text-sm flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:brightness-110 transition-all"
+          disabled={isSendingGM}
+          className="w-full py-3.5 rounded-xl bg-[#E8A020]/20 hover:bg-[#E8A020]/30 border border-[#E8A020]/40 text-[#E8A020] transition-colors flex items-center justify-center gap-2 font-['Cinzel'] text-xs font-bold shadow-[0_0_15px_rgba(232,160,32,0.2)]"
         >
-          Say "GM" On-Chain
+          <Sun size={16} />
+          {isSendingGM ? "Sending GM on Base..." : gmTxHash ? `GM Sent (${gmTxHash})` : "Say GM On-Chain"}
         </button>
 
         <button
