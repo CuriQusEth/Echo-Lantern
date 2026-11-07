@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useGameStore } from '../../store/gameStore';
 import { useAccount, useSignMessage, useSendTransaction } from 'wagmi';
+import { base } from 'wagmi/chains';
 import { BUILDER_CODE, encodeAttributionCalldata } from '../../lib/erc8021/attribution';
 import { parseEther } from 'viem';
 import { Sun } from 'lucide-react';
@@ -26,10 +27,10 @@ export function GameOverScreen() {
     }
     try {
       setIsSubmitting(true);
-      const message = `Echo Lantern Tower Climb Record\nFloor Reached: ${score}\nBearer: ${address}\nBuilder Code: ${BUILDER_CODE}\nTimestamp: ${new Date().toISOString()}`;
+      const message = `Echo Lantern Tower Climb Record\nNetwork: Base Mainnet (Denim 200ms Native Blocks)\nFloor Reached: ${score}\nBearer: ${address}\nBuilder Code: ${BUILDER_CODE}\nTimestamp: ${new Date().toISOString()}`;
       const signature = await signMessageAsync({ account: address!, message });
       
-      console.log("SIWE Climb Signature:", signature);
+      console.log("SIWE Climb Signature on Base Mainnet:", signature);
       encodeAttributionCalldata("0x", { builderCode: BUILDER_CODE });
       
       setTxHash(signature.slice(0, 10) + '...' + signature.slice(-8));
@@ -50,11 +51,12 @@ export function GameOverScreen() {
       const hash = await sendTransactionAsync({
         to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
         value: parseEther('0'),
+        chainId: base.id, // Explicit Base Mainnet Denim
         data: '0x'
       });
-      console.log('GM TX Hash:', hash);
+      console.log('GM TX Hash on Base Mainnet:', hash);
       setGmTxHash(hash.slice(0, 8) + '...' + hash.slice(-6));
-      alert(`GM sent on Base! Hash: ${hash}`);
+      alert(`GM sent on Base Mainnet (Denim 200ms)! Hash: ${hash}`);
     } catch (error) {
       console.error('Failed to send GM:', error);
     } finally {

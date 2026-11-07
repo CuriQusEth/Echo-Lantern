@@ -5,21 +5,26 @@ import { injected } from 'wagmi/connectors';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 /**
- * Base Denim Upgrade Integration:
- * - Denim introduces canonical 200ms native blocks (live on Base Sepolia, Base Mainnet)
- * - Deprecates Flashblocks and "pending" block tags in favor of canonical 200ms blocks
- * - Configured with responsive batching and fast polling for near-instant confirmations
+ * Base Denim Mainnet Upgrade:
+ * - Denim activated on Base Mainnet on November 5, 2026 at 18:00 UTC
+ *   (and Base Sepolia on October 21, 2026).
+ * - Base retired Flashblocks and replaced them with canonical 200ms native blocks.
+ * - Flashblocks subscriptions, websocket streams, and "pending" preconfirmation states
+ *   have been replaced by canonical 200ms native blocks.
+ * - Configured with 200ms pollingInterval and batched RPC transports.
  */
 export const wagmiConfig = createConfig({
   chains: [base, baseSepolia],
   connectors: [injected()],
+  ssr: false,
+  pollingInterval: 200, // 200ms canonical blocks on Denim Mainnet
   transports: {
-    [base.id]: http(undefined, {
+    [base.id]: http('https://mainnet.base.org', {
       batch: true,
       retryCount: 3,
       retryDelay: 200,
     }),
-    [baseSepolia.id]: http(undefined, {
+    [baseSepolia.id]: http('https://sepolia.base.org', {
       batch: true,
       retryCount: 3,
       retryDelay: 200,
@@ -30,8 +35,8 @@ export const wagmiConfig = createConfig({
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchInterval: 2000,
-      staleTime: 1000,
+      refetchInterval: 1000,
+      staleTime: 200,
     },
   },
 });
@@ -45,3 +50,4 @@ export function Web3Provider({ children }: { children: ReactNode }) {
     </WagmiProvider>
   );
 }
+

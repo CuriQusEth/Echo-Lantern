@@ -7,6 +7,7 @@ import { LeaderboardScreen } from './components/screens/LeaderboardScreen';
 import { CodexScreen } from './components/screens/CodexScreen';
 import { useGameStore } from './store/gameStore';
 import { useAccount, useSendTransaction } from 'wagmi';
+import { base } from 'wagmi/chains';
 import { Sun } from 'lucide-react';
 import { parseEther } from 'viem';
 
@@ -33,10 +34,11 @@ export default function App() {
       const txHash = await sendTransactionAsync({
         to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
         value: parseEther('0'), // sending 0 ETH for GM
-        data: '0x' // empty data or any required data
+        chainId: base.id, // Explicit Base Mainnet (Denim 200ms)
+        data: '0x' // empty data
       });
-      console.log('GM Transaction sent:', txHash);
-      alert('GM Transaction sent! Hash: ' + txHash);
+      console.log('GM Transaction sent on Base Mainnet:', txHash);
+      alert('GM Transaction sent on Base Mainnet (Denim 200ms)! Hash: ' + txHash);
     } catch (error) {
       console.error('Failed to send GM:', error);
     } finally {

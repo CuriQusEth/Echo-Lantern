@@ -1,13 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useGameStore } from '../../store/gameStore';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi';
+import { base } from 'wagmi/chains';
 
 export function TitleScreen() {
   const setGameState = useGameStore((state) => state.setGameState);
-  const { isConnected, address } = useAccount();
+  const { isConnected, address, chainId } = useAccount();
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
+  const { switchChain } = useSwitchChain();
+
+  const isWrongChain = isConnected && chainId !== base.id;
 
   return (
     <motion.div 
@@ -19,8 +23,16 @@ export function TitleScreen() {
       <div className="absolute top-4 right-4 flex items-center gap-2">
         <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#0052FF]/15 border border-[#0052FF]/30 text-[#60A5FA] text-[11px] font-mono">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          Base Denim (200ms)
+          Base Mainnet (Denim 200ms)
         </div>
+        {isWrongChain && (
+          <button
+            onClick={() => switchChain({ chainId: base.id })}
+            className="px-2.5 py-1 rounded bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs hover:bg-amber-500/30 transition animate-pulse"
+          >
+            Switch to Base Mainnet
+          </button>
+        )}
         {isConnected ? (
           <button 
             onClick={() => disconnect()}
