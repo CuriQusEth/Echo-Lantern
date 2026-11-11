@@ -25,10 +25,12 @@ export default function handler(req: any, res: any) {
       version: "1.0.0",
       name: "Echo Lantern MCP Endpoint",
       status: "active",
-      description: "Active MCP server for Echo Lantern Orchestrator Agent",
+      description: "Active MCP server for Echo Lantern Orchestrator Agent on Base Mainnet (Denim 200ms)",
+      chain: "eip155:8453",
       capabilities: ["echo-lantern-mechanics", "light-guidance", "narrative-illumination"],
       timestamp: new Date().toISOString()
     });
+
   }
 
   if (req.method === 'POST') {

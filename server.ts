@@ -18,11 +18,13 @@ async function startServer() {
       version: "1.0.0",
       name: "Echo Lantern MCP Endpoint",
       status: "active",
-      description: "Active MCP server for Echo Lantern Orchestrator Agent",
+      description: "Active MCP server for Echo Lantern Orchestrator Agent on Base Mainnet (Denim 200ms)",
+      chain: "eip155:8453",
       capabilities: ["echo-lantern-mechanics", "light-guidance", "narrative-illumination"],
       timestamp: new Date().toISOString()
     });
   });
+
 
   const TOOLS = [
     { name: 'get_race_status', description: 'Get the current race status', inputSchema: { type: 'object', properties: {} } },
@@ -91,9 +93,12 @@ async function startServer() {
       status: "active",
       wallet: "0x29536D0bc1004ab274c4F0F59734Ad74D4559b7B",
       platform: "Echo Lantern",
-      version: "1.0.0"
+      version: "1.0.0",
+      network: "Base Mainnet (Denim 200ms)",
+      chainId: 8453
     });
   });
+
 
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

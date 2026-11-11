@@ -17,8 +17,11 @@ export default function handler(req: any, res: any) {
       status: "active",
       wallet: "0x29536D0bc1004ab274c4F0F59734Ad74D4559b7B",
       platform: "Echo Lantern",
-      version: "1.0.0"
+      version: "1.0.0",
+      network: "Base Mainnet (Denim 200ms)",
+      chainId: 8453
     });
+
   }
 
   if (req.method === 'POST') {
